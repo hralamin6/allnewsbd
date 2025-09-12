@@ -5,4 +5,4 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use App\Jobs\GenerateHourlyPostJob;
 
-Schedule::job(new \App\Jobs\GenerateHourlyPostJob())->everyMinute();
+//Schedule::job(new \App\Jobs\GenerateHourlyPostJob())->everyMinute();

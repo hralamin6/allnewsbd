@@ -8,6 +8,7 @@
         "php": "^8.2",
         "barryvdh/laravel-translation-manager": "^0.6.6",
         "browner12/helpers": "^3.6",
+        "guzzlehttp/guzzle": "^7.9",
         "jantinnerezo/livewire-alert": "^3.0",
         "larasocket/larasocket-driver": "^1.0",
         "laravel-notification-channels/webpush": "^9.0",
@@ -22,6 +23,8 @@
         "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-backup": "^8.8",
         "spatie/laravel-medialibrary": "^11.9",
+        "symfony/css-selector": "^7.3",
+        "symfony/dom-crawler": "^7.3",
         "tanmuhittin/laravel-google-translate": "^2.3"
     },
     "require-dev": {

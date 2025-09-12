@@ -2,9 +2,15 @@
 
 namespace App\Livewire\Web;
 
+use App\Jobs\ScrapeBanglaTribuneJob;
+use App\Jobs\ScrapeJagoNewsJob;
+use App\Jobs\ScrapeJamunaTvJob;
+use App\Jobs\ScrapeNews24Job;
+use App\Jobs\ScrapeProthomAloJob;
 use App\Jobs\SendWebPushNotifications;
 use App\Models\Category;
 use App\Models\Post;
+use http\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -13,6 +19,7 @@ use League\CommonMark\CommonMarkConverter;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Symfony\Component\DomCrawler\Crawler;
 
 class PostCrudComponent extends Component
 {
@@ -21,6 +28,7 @@ class PostCrudComponent extends Component
     use WithPagination;
 
     // Form fields
+    public $news = [];
     public $title = '';
     public $type = 'featured';
     public $slug = '';
@@ -505,6 +513,95 @@ No extra text before or after the JSON.',
             $this->save();
         } catch (\Throwable $e) {
             $this->alert('error', 'Failed to generate post.');
+        }
+    }
+
+    public function prothomAlo()
+    {
+        ScrapeProthomAloJob::dispatch();
+
+    }
+    public function jamunaTv()
+    {
+        ScrapeJamunaTvJob::dispatch();
+
+    }
+    public function banglaNews24()
+    {
+        ScrapeNews24Job::dispatch();
+
+    }
+    public function jagoNews()
+    {
+        ScrapeJagoNewsJob::dispatch();
+
+    }
+    public function banglaTribune()
+    {
+        ScrapeBanglaTribuneJob::dispatch();
+
+    }
+    public function newsDetails($url)
+    {
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->get($url,  [
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Accept'     => 'text/html,application/xhtml+xml',
+            ]
+        ]);
+        $html = (string) $res->getBody();
+
+        $crawler = new Crawler($html);
+        if ($crawler->filter('h1.IiRps')->count() > 0) {
+            // Get title
+            $title = $crawler->filter('h1.IiRps')->first()->text();
+
+            // Get content
+            $contentNodes = $crawler->filter('div.story-content p');
+            $content = '';
+            foreach ($contentNodes as $p) {
+                $content .= '<p>' . $p->textContent . '</p>';
+            }
+
+            // Get image (first image)
+            $imageNode = $crawler->filter('div.qt-image-dynamic img')->first();
+            $image = null;
+            if ($crawler->filter('meta[property="og:image"]')->count()) {
+                $image = $crawler->filter('meta[property="og:image"]')->attr('content');
+            } elseif ($crawler->filter('meta[name="twitter:image"]')->count()) {
+                $image = $crawler->filter('meta[name="twitter:image"]')->attr('content');
+            }
+
+            // Get category
+            $categoryName = $crawler->filter('a.vXi2j')->first()->text();
+            $parent = Category::firstOrCreate(['name' => 'Prothomalo']);
+            $category = Category::firstOrCreate(['name' => $categoryName, 'parent_id' => $parent->id]);
+
+            // Published date
+            $published_at = $crawler->filter('time')->first()->attr('datetime');
+
+            // Save post
+            $post = Post::create([
+                'user_id' => 1, // just demo, use actual author id
+                'category_id' => $category->id,
+                'title' => $title,
+                'slug' => Str::slug($title),
+                'content' => $content,
+                'image' => $image,
+                'source' => $url,
+                'excerpt' => Str::limit(strip_tags($content), 200),
+                'tags' => json_encode([]),
+                'views' => 0,
+                'status' => 'published',
+                'type' => 'normal',
+                'meta_title' => $title,
+                'meta_description' => Str::limit(strip_tags($content), 160),
+                'published_at' => $published_at,
+            ]);
+
+//            $this->alert('success', __('Post created from Prothomalo .' . $post->id));
         }
     }
 

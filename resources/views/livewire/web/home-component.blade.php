@@ -11,7 +11,7 @@
                         'id' => $post->id,
                         'title' => $post->title,
                         'slug' => $post->slug,
-                        'category' => $post->category?->name ?? 'General',
+                        'category' => $post->category?->parent?->name .' | '. $post->category?->name ?? 'General',
                         'img' => $post->getFirstMediaUrl('postImages', 'avatar') ?: getWebErrorImage(),
                     ];
                 })->values()->all()
@@ -97,7 +97,7 @@
                             <img src="{{ $post->getFirstMediaUrl('postImages', 'avatar') }}"
                                  onerror="{{ getWebErrorImage() }}"
                                  alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-medium px-3 py-1 rounded-full">{{ $post->category->name ?? 'General' }}</span>
+                            <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-medium px-3 py-1 rounded-full">{{ $post->category?->parent?->name .' | '. $post->category?->name ?? 'General' }}</span>
                             <a wire:navigate href="{{ route('web.post.details', $post->slug) }}" class="absolute inset-0" aria-label="{{ $post->title }}"></a>
                         </div>
                         <div class="p-5 flex flex-col flex-1">
@@ -110,7 +110,8 @@
                             <div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mb-2">
                                     <span class="font-medium">{{ $post->user->name ?? 'N/A' }}</span>
-                                    <span>{{ optional($post->published_at ?? $post->updated_at)->format('M d, Y') }}</span>
+                                    <span>{{ optional($post->published_at)->format('M d, Y') }}</span>
+                                    <span>{{ optional($post->published_at)->diffForHumans() ?? 'N/A' }}</span>
                                 </div>
                                 <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                                     <span></span>

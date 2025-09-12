@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('title');  // Blog title
             $table->string('slug')->unique();  // Slug for SEO-friendly URL
             $table->text('content');  // Blog content
+            $table->text('image')->nullable();  // Blog content
+            $table->text('source')->nullable();  // Blog content
             $table->text('excerpt')->nullable();  // Blog excerpt/summary
             $table->json('tags')->nullable();  // Tags (stored as JSON)
             $table->integer('views')->default(0);  // Tags (stored as JSON)

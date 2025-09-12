@@ -6,7 +6,23 @@
             <h1 class="text-lg font-semibold">Create Post</h1>
             <p class="text-xs text-gray-500">Fill in the details below to publish a new post.</p>
         </div>
-
+        <div class="pt-2 flex items-center gap-3">
+            <button wire:click="prothomAlo" wire:loading.remove wire:target="prothomAlo" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500">
+                Prothom Alo
+            </button>
+            <button wire:click="jamunaTv" wire:loading.remove wire:target="jamunaTv" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500">
+                Jamuna TV
+            </button>
+            <button wire:click="banglaNews24" wire:loading.remove wire:target="banglaNews24" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500">
+                BanglaNews24
+            </button>
+            <button wire:click="jagoNews" wire:loading.remove wire:target="jagoNews" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500">
+                JagoNews
+            </button>
+            <button wire:click="banglaTribune" wire:loading.remove wire:target="banglaTribune" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500">
+                BanglaTribune
+            </button>
+        </div>
         <form wire:submit.prevent="save" class="p-5 grid grid-cols-1 lg:grid-cols-3 gap-6 w-fit">
             <!-- Main -->
             <div class="lg:col-span-2 space-y-5">
@@ -114,7 +130,7 @@
                         </div>
                     @elseif ($editingId)
                         <div class="mt-3 aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                            <img src="{{ $post->getFirstMediaUrl('postImages', 'avatar') }}" onerror="{{ getErrorImage() }}" class="w-full h-full object-cover" alt="cover preview" />
+                            <img src="{{ $post->image}}" onerror="{{ getErrorImage() }}" class="w-full h-full object-cover" alt="cover preview" />
                         </div>
                     @endif
                 </div>
@@ -157,7 +173,7 @@
                             <td class="px-4 py-3">
                                 <a wire:navigate href="{{route('web.post.details', $post->slug)}}" class="flex items-center gap-3">
                                     <div class="w-14 h-10 rounded-md overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700 flex-shrink-0">
-                                        <img src="{{ $post->getFirstMediaUrl('postImages', 'avatar') }}" onerror="{{ getErrorImage() }}" alt="thumb" class="w-full h-full object-cover" />
+                                        <img src="{{ $post->image}}" onerror="{{ getErrorImage() }}" alt="thumb" class="w-full h-full object-cover" />
                                     </div>
                                     <div class="min-w-0 w-48">
                                         <div class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ $post->title }}</div>

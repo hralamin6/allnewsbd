@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         // Create 5 parent categories
 //        $parentCategories = Category::factory()->count(10)->create();
         // create 10 using catergory seeder
-            $this->call(CategorySeeder::class);
+//            $this->call(CategorySeeder::class);
         // Create 10 users        // Create 10 users
 //        $users = User::factory()->count(10)->create();
 

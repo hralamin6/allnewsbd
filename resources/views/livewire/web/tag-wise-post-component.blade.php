@@ -18,7 +18,7 @@
             @forelse($posts as $post)
                 <article class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
                     <div class="relative h-44 overflow-hidden">
-                        <img src="{{ $post->getFirstMediaUrl('postImages', 'avatar') }}" onerror="{{getErrorImage()}}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src="{{ $post->image}}" onerror="{{getErrorImage()}}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-medium px-3 py-1 rounded-full">{{ $post->category->name ?? 'General' }}</span>
                         <a wire:navigate href="{{ route('web.post.details', $post->slug) }}" class="absolute inset-0" aria-label="{{ $post->title }}"></a>
                     </div>

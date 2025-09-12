@@ -7,7 +7,7 @@
         <ol class="flex items-center gap-2">
             <li><a wire:navigate href="{{ route('web.home') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400">@lang('Home')</a></li>
             <li class="opacity-60">/</li>
-            <li><a wire:navigate href="{{ route('web.category.wise.post', $post->category_id) }}" class="hover:text-indigo-600 dark:hover:text-indigo-400">{{ $post->category->name ?? __('General') }}</a></li>
+            <li><a wire:navigate href="{{ route('web.category.wise.post', $post->category_id) }}" class="hover:text-indigo-600 dark:hover:text-indigo-400">{{ $post->category?->parent?->name .' | '. $post->category?->name ?? __('General') }}</a></li>
             <li class="opacity-60">/</li>
             <li class="truncate max-w-[60vw] md:max-w-none" title="{{ $post->title }}">{{ $post->title }}</li>
         </ol>
@@ -58,7 +58,7 @@
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M20.59 13.41 11 3.83 7.76 7.07l9.59 9.59 3.24-3.25zM6.34 8.49 3.1 11.73c-.59.59-.59 1.54 0 2.12l7.05 7.05c.59.59 1.54.59 2.12 0l3.24-3.24L6.34 8.49z"/>
                     </svg>
-                    {{ $post->category->name ?? __('General') }}
+                    {{ $post->category?->parent?->name .' | '. $post->category?->name ?? __('General') }}
                 </a>
 
                 <!-- Actions -->
@@ -159,7 +159,7 @@
     <!-- Content -->
     <article class="px-2 mt-4 max-w-4xl mx-auto">
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-5 px-3 md:p-7">
-            <div class="prose prose-sm md:prose lg:prose-lg dark:prose-invert max-w-none">
+            <div class="prose md:prose lg:prose-lg dark:prose-invert max-w-none">
                 {!! $post->content !!}
             </div>
 
@@ -202,7 +202,7 @@
     <section class="px-4 py-10 max-w-6xl mx-auto">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-base font-semibold">@lang('Related Posts')</h2>
-            <a wire:navigate href="{{ route('web.category.wise.post', $post->category_id) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">@lang('More in') {{ $post->category->name ?? __('General') }}</a>
+            <a wire:navigate href="{{ route('web.category.wise.post', $post->category_id) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">@lang('More in') {{ $post->category?->parent?->name .' | '. $post->category?->name ?? __('General') }}</a>
         </div>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @forelse($relatedPosts as $rp)
@@ -210,7 +210,7 @@
                 <article class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
                     <div class="relative h-40 overflow-hidden">
                         <img src="{{ $img }}" onerror="{{ getErrorImage() }}" alt="{{ $rp->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-0.5 rounded-full">{{ $rp->category->name ?? 'General' }}</span>
+                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-0.5 rounded-full">{{ $rp->category?->parent?->name .' | '. $rp->category?->name ?? 'General' }}</span>
                         <a wire:navigate href="{{ route('web.post.details', $rp->slug) }}" class="absolute inset-0" aria-label="{{ $rp->title }}"></a>
                     </div>
                     <div class="p-4 flex flex-col flex-1">
@@ -238,7 +238,7 @@
                 <article class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
                     <div class="relative h-40 overflow-hidden">
                         <img src="{{ $img }}" onerror="{{ getErrorImage() }}" alt="{{ $rp->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-0.5 rounded-full">{{ $rp->category->name ?? 'General' }}</span>
+                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-[11px] font-medium px-2 py-0.5 rounded-full">{{ $rp->category?->parent?->name .' | '. $rp->category?->name ?? 'General' }}</span>
                         <a wire:navigate href="{{ route('web.post.details', $rp->slug) }}" class="absolute inset-0" aria-label="{{ $rp->title }}"></a>
                     </div>
                     <div class="p-4 flex flex-col flex-1">
