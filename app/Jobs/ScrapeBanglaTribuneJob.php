@@ -31,6 +31,7 @@ class ScrapeBanglaTribuneJob implements ShouldQueue
         try {
             $client = new Client([
                 'timeout' => 300,
+                'cookies' => true,
                 'verify'  => true,
                 'headers' => [
                     'User-Agent' =>

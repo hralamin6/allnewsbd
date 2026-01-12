@@ -32,6 +32,7 @@ class ScrapeProthomAloJob implements ShouldQueue
             $client = new Client([
                 'timeout' => 300,
                 'verify'  => true,
+                'cookies' => true,
                 'headers' => [
                     'User-Agent' =>
                         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' .
